@@ -152,15 +152,16 @@ export function usePoseDetection(canvasRef?: React.RefObject<HTMLCanvasElement>)
       return { move: "none", confidence: 0, isDetected: false };
     }
 
-    // Check for each gesture
-    const gestures = [
-      detectFireball(landmarks),
-      detectLightning(landmarks),
-      detectShield(landmarks),
-      detectJobApplication(landmarks),
-      detectPowerStance(landmarks),
-      detectDodgeRoll(landmarks),
-    ];
+     // Check for each gesture
+     const gestures = [
+       detectFireball(landmarks),
+       detectLightning(landmarks),
+       detectShield(landmarks),
+       detectJobApplication(landmarks),
+       detectPowerStance(landmarks),
+       detectDodgeRoll(landmarks),
+       detectMeteor(landmarks),
+     ];
 
     // Return the gesture with highest confidence
     const bestGesture = gestures.reduce((best, current) => 
@@ -277,25 +278,65 @@ export function usePoseDetection(canvasRef?: React.RefObject<HTMLCanvasElement>)
     };
   };
 
-  const detectDodgeRoll = (landmarks: any[]): GestureDetection => {
-    const leftShoulder = landmarks[11];
-    const rightShoulder = landmarks[12];
-    const leftHip = landmarks[23];
-    const rightHip = landmarks[24];
+   const detectDodgeRoll = (landmarks: any[]): GestureDetection => {
+     const leftShoulder = landmarks[11];
+     const rightShoulder = landmarks[12];
+     const leftHip = landmarks[23];
+     const rightHip = landmarks[24];
 
-    // Body tilted to one side
-    const leftSideTilt = leftShoulder.x < leftHip.x;
-    const rightSideTilt = rightShoulder.x > rightHip.x;
-    const isTilted = leftSideTilt || rightSideTilt;
+     // Body tilted to one side
+     const leftSideTilt = leftShoulder.x < leftHip.x;
+     const rightSideTilt = rightShoulder.x > rightHip.x;
+     const isTilted = leftSideTilt || rightSideTilt;
 
-    const confidence = isTilted ? 0.6 : 0;
+     const confidence = isTilted ? 0.6 : 0;
 
-    return {
-      move: "dodge_roll",
-      confidence,
-      isDetected: confidence > 0.5
-    };
-  };
+     return {
+       move: "dodge_roll",
+       confidence,
+       isDetected: confidence > 0.5
+     };
+   };
+
+   const detectMeteor = (landmarks: any[]): GestureDetection => {
+     const leftWrist = landmarks[15];
+     const rightWrist = landmarks[16];
+     const leftShoulder = landmarks[11];
+     const rightShoulder = landmarks[12];
+     const leftElbow = landmarks[13];
+     const rightElbow = landmarks[14];
+     const nose = landmarks[0];
+
+     // Both arms very high above head
+     const bothArmsVeryHigh = 
+       leftWrist.y < leftShoulder.y - 0.15 && 
+       rightWrist.y < rightShoulder.y - 0.15;
+
+     // Arms should be above nose level
+     const armsAboveNose = 
+       leftWrist.y < nose.y - 0.1 && 
+       rightWrist.y < nose.y - 0.1;
+
+     // Elbows should also be high
+     const elbowsHigh = 
+       leftElbow.y < leftShoulder.y - 0.1 && 
+       rightElbow.y < rightShoulder.y - 0.1;
+
+     // Arms should be spread apart (not together like fireball)
+     const armsSpread = 
+       Math.abs(leftWrist.x - rightWrist.x) > 0.2;
+
+     const basicMeteor = bothArmsVeryHigh && armsAboveNose;
+     const preciseMeteor = basicMeteor && elbowsHigh && armsSpread;
+
+     const confidence = preciseMeteor ? 0.9 : (basicMeteor ? 0.7 : 0);
+
+     return {
+       move: "meteor",
+       confidence,
+       isDetected: confidence > 0.6
+     };
+   };
 
 
   return {

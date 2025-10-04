@@ -122,6 +122,7 @@ export function Game() {
 								<p>• Job App: Prayer hands</p>
 								<p>• Power Stance: Wide stance</p>
 								<p>• Dodge Roll: Lean to one side</p>
+								<p>• Meteor: Both arms very high, spread apart</p>
 							</div>
 						</div>
 					</CardContent>
