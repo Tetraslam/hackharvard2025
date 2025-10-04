@@ -1,0 +1,13 @@
+{
+  "name": "hackharvard2025",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev:server": "pnpm --filter server dev",
+    "dev:client": "pnpm --filter client dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
