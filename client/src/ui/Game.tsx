@@ -32,7 +32,8 @@ export function Game() {
 				phase={phase}
 			/>
 
-			<div className="flex h-full items-center justify-center p-8">
+			{/* Main game area - centered with proper spacing for HUD */}
+			<div className="flex h-full items-center justify-center pt-32 pb-8 px-8">
 				<Card className="w-full max-w-4xl">
 					<CardContent className="p-20 text-center space-y-6">
 						<div className="text-8xl opacity-30">🎮</div>

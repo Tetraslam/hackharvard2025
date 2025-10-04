@@ -88,6 +88,12 @@ export function Lobby() {
     socket.emit("ready");
   };
 
+  const handleExit = () => {
+    const socket = getSocket();
+    socket.disconnect();
+    useGameStore.getState().reset();
+  };
+
   if (!roomCode) {
     return (
       <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background p-4 md:p-8">
@@ -210,6 +216,15 @@ export function Lobby() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background p-8">
+      {/* Exit button */}
+      <Button
+        onClick={handleExit}
+        variant="outline"
+        className="absolute top-6 right-6 z-20"
+      >
+        Exit to Main Menu
+      </Button>
+
       <div className="relative z-10 w-full max-w-6xl space-y-20">
         <div className="text-center space-y-10">
           <h1 className="text-6xl font-bold retro leading-[1.8]">
