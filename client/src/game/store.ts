@@ -14,6 +14,8 @@ interface GameStore {
   lastInteraction: { type: string; moves: MoveType[] } | null;
   winnerId: string | null;
   error: string | null;
+  isReady: boolean;
+  opponentReady: boolean;
   
   setPhase: (phase: GamePhase) => void;
   setRoomCode: (code: string) => void;
@@ -28,6 +30,8 @@ interface GameStore {
   setLastInteraction: (interaction: { type: string; moves: MoveType[] }) => void;
   setWinner: (winnerId: string) => void;
   setError: (error: string | null) => void;
+  setReady: (ready: boolean) => void;
+  setOpponentReady: (ready: boolean) => void;
   reset: () => void;
 }
 
@@ -44,6 +48,8 @@ const initialState = {
   lastInteraction: null,
   winnerId: null,
   error: null,
+  isReady: false,
+  opponentReady: false,
 };
 
 export const useGameStore = create<GameStore>((set) => ({
@@ -80,6 +86,12 @@ export const useGameStore = create<GameStore>((set) => ({
   setWinner: (winnerId) => set({ winnerId }),
   
   setError: (error) => set({ error }),
+  
+  setReady: (ready) => set({ isReady: ready }),
+  
+  setOpponentReady: (ready) => set({ opponentReady: ready }),
+  
+  setCurrentView: (view) => set({ currentView: view }),
   
   reset: () => set(initialState),
 }));

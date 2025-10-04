@@ -19,7 +19,7 @@ export function HUD({ playerHp, opponentHp, round, phase }: HUDProps) {
 		<>
 			<div className="pointer-events-none fixed inset-x-0 top-0 z-50 p-6">
 				<div className="mx-auto flex max-w-6xl items-start justify-between gap-6">
-					<Card className="flex-1 max-w-md">
+					<Card className="w-96">
 						<CardContent className="p-6 space-y-4">
 							<div className="flex items-center justify-between">
 								<h3 className="text-xl retro" style={{ lineHeight: "1.5" }}>
@@ -42,7 +42,7 @@ export function HUD({ playerHp, opponentHp, round, phase }: HUDProps) {
 						</CardContent>
 					</Card>
 
-					<Card className="flex-1 max-w-md">
+					<Card className="w-96">
 						<CardContent className="p-6 space-y-4">
 							<div className="flex items-center justify-between">
 								<Badge variant="secondary">{opponentHp} HP</Badge>

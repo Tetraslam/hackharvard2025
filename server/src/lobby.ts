@@ -128,6 +128,9 @@ export function markReady(io: Server, socket: TypedSocket): void {
 
 	player.ready = true;
 
+	// Notify other players that this player is ready
+	io.to(roomCode).emit("playerReady", socket.id);
+
 	const allReady = Array.from(gameState.players.values()).every((p) => p.ready);
 
 	if (allReady && gameState.players.size === 2) {

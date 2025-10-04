@@ -32,6 +32,10 @@ export function Lobby() {
     setPlayerName: storePlayerName,
     setOpponentId,
     setOpponentName,
+    isReady,
+    setReady,
+    opponentReady,
+    setCurrentView,
   } = useGameStore();
 
   const handleCreate = () => {
@@ -86,6 +90,7 @@ export function Lobby() {
   const handleReady = () => {
     const socket = getSocket();
     socket.emit("ready");
+    setReady(true);
   };
 
   const handleExit = () => {
@@ -94,10 +99,14 @@ export function Lobby() {
     useGameStore.getState().reset();
   };
 
+  const handleViewRules = () => {
+    setCurrentView("rules");
+  };
+
   if (!roomCode) {
     return (
-      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background p-4 md:p-8">
-        <div className="relative z-10 w-full max-w-5xl space-y-40 md:space-y-56">
+      <div className="relative flex min-h-screen items-start justify-center overflow-hidden bg-background p-4 md:p-8 pt-8" style={{ paddingTop: '40px' }}>
+        <div className="relative z-10 w-full max-w-5xl space-y-16 md:space-y-20">
           <div className="space-y-6 md:space-y-8 text-center">
             <h1 className="text-3xl md:text-5xl font-bold retro leading-[1.8]">
               FIREBALL
@@ -209,6 +218,18 @@ export function Lobby() {
               </CardContent>
             </Card>
           </div>
+
+          {/* Rules Button */}
+          <div className="flex justify-center" style={{ marginTop: '30px' }}>
+            <Button
+              onClick={handleViewRules}
+              variant="outline"
+              size="lg"
+              className="text-lg px-8 py-4"
+            >
+              📖 View Rules & Moves
+            </Button>
+          </div>
         </div>
       </div>
     );
@@ -250,7 +271,7 @@ export function Lobby() {
                   <CardTitle className="text-3xl retro leading-[1.8]">
                     {storedPlayerName || "You"}
                   </CardTitle>
-                  <Badge>Ready</Badge>
+                  <Badge>{isReady ? "Ready" : "Not Ready"}</Badge>
                 </div>
               </div>
               <Separator />
@@ -273,7 +294,7 @@ export function Lobby() {
                     <CardTitle className="text-3xl retro leading-[1.8]">
                       {opponentName}
                     </CardTitle>
-                    <Badge variant="secondary">Connected</Badge>
+                    <Badge variant="secondary">{opponentReady ? "Ready" : "Not Ready"}</Badge>
                   </div>
                 </div>
                 <Separator />

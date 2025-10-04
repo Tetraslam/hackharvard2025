@@ -15,6 +15,7 @@ export function useSocketEvents() {
 		setLastInteraction,
 		setWinner,
 		setError,
+		setOpponentReady,
 		playerId,
 	} = useGameStore();
 
@@ -41,6 +42,14 @@ export function useSocketEvents() {
 			console.log("Player left:", leftPlayerId);
 			if (leftPlayerId === useGameStore.getState().opponentId) {
 				setOpponentId(null);
+				setOpponentReady(false);
+			}
+		});
+
+		socket.on("playerReady", (readyPlayerId: string) => {
+			console.log("Player ready:", readyPlayerId);
+			if (readyPlayerId === useGameStore.getState().opponentId) {
+				setOpponentReady(true);
 			}
 		});
 
@@ -108,6 +117,7 @@ export function useSocketEvents() {
 			socket.off("connect");
 			socket.off("playerJoined");
 			socket.off("playerLeft");
+			socket.off("playerReady");
 			socket.off("gamePhaseChange");
 			socket.off("gameStateUpdate");
 			socket.off("moveExecuted");
@@ -128,6 +138,7 @@ export function useSocketEvents() {
 		setLastInteraction,
 		setWinner,
 		setError,
+		setOpponentReady,
 		playerId,
 		setOpponentName,
 	]);
