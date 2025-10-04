@@ -89,8 +89,15 @@ export function Lobby() {
 
   const handleReady = () => {
     const socket = getSocket();
-    socket.emit("ready");
-    setReady(true);
+    if (isReady) {
+      // Unready
+      socket.emit("unready");
+      setReady(false);
+    } else {
+      // Ready
+      socket.emit("ready");
+      setReady(true);
+    }
   };
 
   const handleExit = () => {
@@ -227,7 +234,7 @@ export function Lobby() {
               size="lg"
               className="text-lg px-8 py-4"
             >
-              📖 View Rules & Moves
+              View Rules & Moves
             </Button>
           </div>
         </div>
@@ -325,7 +332,7 @@ export function Lobby() {
               size="lg"
               className="text-2xl px-16 py-10 retro"
             >
-              Ready to Battle
+              {isReady ? "Unready" : "Ready to Battle"}
             </Button>
           </div>
         )}

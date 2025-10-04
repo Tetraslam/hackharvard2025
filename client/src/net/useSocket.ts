@@ -53,6 +53,13 @@ export function useSocketEvents() {
 			}
 		});
 
+		socket.on("playerUnready", (unreadyPlayerId: string) => {
+			console.log("Player unready:", unreadyPlayerId);
+			if (unreadyPlayerId === useGameStore.getState().opponentId) {
+				setOpponentReady(false);
+			}
+		});
+
 		socket.on("gamePhaseChange", (phase, data) => {
 			console.log("Phase change:", phase, data);
 			setPhase(phase);
@@ -118,6 +125,7 @@ export function useSocketEvents() {
 			socket.off("playerJoined");
 			socket.off("playerLeft");
 			socket.off("playerReady");
+			socket.off("playerUnready");
 			socket.off("gamePhaseChange");
 			socket.off("gameStateUpdate");
 			socket.off("moveExecuted");

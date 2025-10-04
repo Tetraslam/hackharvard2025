@@ -138,6 +138,22 @@ export function markReady(io: Server, socket: TypedSocket): void {
 	}
 }
 
+export function markUnready(io: Server, socket: TypedSocket): void {
+	const roomCode = socket.data.roomCode;
+	if (!roomCode) return;
+
+	const gameState = rooms.get(roomCode);
+	if (!gameState) return;
+
+	const player = gameState.players.get(socket.id);
+	if (!player) return;
+
+	player.ready = false;
+
+	// Notify other players that this player is unready
+	io.to(roomCode).emit("playerUnready", socket.id);
+}
+
 function startRound(io: Server, roomCode: string): void {
 	const gameState = rooms.get(roomCode);
 	if (!gameState) return;

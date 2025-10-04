@@ -34,6 +34,7 @@ interface ClientToServerEvents {
   createLobby: (name: string, callback: (code: string) => void) => void;
   joinLobby: (code: string, name: string, callback: (success: boolean, error?: string, players?: Record<string, { name: string }>) => void) => void;
   ready: () => void;
+  unready: () => void;
   cast: (move: MoveType, clientTimestamp: number) => void;
   photoReady: () => void;
   playAgain: () => void;
@@ -44,6 +45,8 @@ interface ServerToClientEvents {
   lobbyJoined: (success: boolean, error?: string, players?: Record<string, { name: string }>) => void;
   playerJoined: (playerId: string, playerName: string, playerCount: number) => void;
   playerLeft: (playerId: string) => void;
+  playerReady: (playerId: string) => void;
+  playerUnready: (playerId: string) => void;
   gamePhaseChange: (phase: GamePhase, data?: Record<string, unknown>) => void;
   gameStateUpdate: (state: {
     players: Record<string, Player>;

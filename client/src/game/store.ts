@@ -32,6 +32,7 @@ interface GameStore {
   setError: (error: string | null) => void;
   setReady: (ready: boolean) => void;
   setOpponentReady: (ready: boolean) => void;
+  setCurrentView: (view: "menu" | "rules" | "lobby" | "game") => void;
   reset: () => void;
 }
 

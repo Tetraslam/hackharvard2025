@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { handleCast, handlePlayAgain } from "./game";
-import { createLobby, handleDisconnect, joinLobby, markReady } from "./lobby";
+import { createLobby, handleDisconnect, joinLobby, markReady, markUnready } from "./lobby";
 import type {
 	ClientToServerEvents,
 	InterServerEvents,
@@ -42,6 +42,10 @@ io.on("connection", (socket) => {
 
 	socket.on("ready", () => {
 		markReady(io, socket);
+	});
+
+	socket.on("unready", () => {
+		markUnready(io, socket);
 	});
 
 	socket.on("cast", (move, clientTimestamp) => {
