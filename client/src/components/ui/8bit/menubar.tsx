@@ -8,7 +8,6 @@ import { Circle } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-import "./styles/retro.css";
 
 export const menubarVariants = cva("", {
   variants: {

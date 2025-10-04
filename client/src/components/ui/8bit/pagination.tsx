@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/pagination";
 
 import { Button } from "../button";
-import "./styles/retro.css";
 
 export const paginationVariants = cva("", {
   variants: {

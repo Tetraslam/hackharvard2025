@@ -10,7 +10,6 @@ import {
   TabsTrigger as ShadcnTabsTrigger,
 } from "@/components/ui/tabs";
 
-import "./styles/retro.css";
 
 export const tabsVariants = cva("", {
   variants: {

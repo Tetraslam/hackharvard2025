@@ -7,7 +7,6 @@ import {
   ToggleGroup as ShadcnToggleGroup,
   ToggleGroupItem as ShadcnToggleGroupItem,
 } from "../toggle-group";
-import "./styles/retro.css";
 
 export const toggleGroupVariants = cva("", {
   variants: {

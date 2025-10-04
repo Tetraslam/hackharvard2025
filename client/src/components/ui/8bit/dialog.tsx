@@ -13,7 +13,6 @@ import {
   DialogTrigger as ShadcnDialogTrigger,
 } from "@/components/ui/dialog";
 
-import "./styles/retro.css";
 
 const Dialog = ShadcnDialog;
 

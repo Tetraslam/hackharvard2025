@@ -9,7 +9,6 @@ import {
 
 import { cn } from "@/lib/utils";
 
-import "./styles/retro.css";
 
 export interface BitCollapsibleProps
   extends React.ComponentProps<typeof CollapsiblePrimitive.Root> {

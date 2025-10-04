@@ -9,7 +9,6 @@ import {
   InputOTPSlot as ShadcnInputOTPSlot,
 } from "@/components/ui/input-otp";
 
-import "./styles/retro.css";
 
 export const inputVariants = cva("", {
   variants: {

@@ -11,7 +11,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-import "./styles/retro.css";
 
 // Menu items.
 const items = [

@@ -14,7 +14,6 @@ import {
   NavigationMenuTrigger as ShadcnNavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 
-import "./styles/retro.css";
 
 export { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 

@@ -13,7 +13,6 @@ import {
   SheetTrigger as ShadcnSheetTrigger,
 } from "@/components/ui/sheet";
 
-import "./styles/retro.css";
 
 const Sheet = ShadcnSheet;
 

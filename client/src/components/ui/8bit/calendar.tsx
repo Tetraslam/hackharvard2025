@@ -13,7 +13,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./select";
-import "./styles/retro.css";
 
 export const calendarVariants = cva("", {
   variants: {

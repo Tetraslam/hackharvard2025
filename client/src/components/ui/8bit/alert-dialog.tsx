@@ -21,7 +21,6 @@ import {
   AlertDialogTrigger as ShadcnAlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-import "./styles/retro.css";
 
 export const alertDialogVariants = cva("", {
   variants: {

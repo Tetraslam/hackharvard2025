@@ -4,7 +4,6 @@ import { cn } from "@/lib/utils";
 
 import { Input as ShadcnInput } from "@/components/ui/input";
 
-import "./styles/retro.css";
 
 export const inputVariants = cva("", {
   variants: {
@@ -28,25 +27,34 @@ function Input({ ...props }: BitInputProps) {
   const { className, font } = props;
 
   return (
-    <div
-      className={cn(
-        "relative border-y-6 border-foreground dark:border-ring !p-0 flex items-center",
-        className
-      )}
-    >
+    <div className="relative">
       <ShadcnInput
         {...props}
         className={cn(
-          "rounded-none ring-0 !w-full",
+          "rounded-none border-none ring-0 focus-visible:ring-0",
           font !== "normal" && "retro",
           className
         )}
       />
 
-      <div
-        className="absolute inset-0 border-x-6 -mx-1.5 border-foreground dark:border-ring pointer-events-none"
-        aria-hidden="true"
-      />
+      {/* Pixelated border */}
+      {/* Top horizontal bars */}
+      <div className="absolute -top-1.5 w-1/2 left-1.5 h-1.5 bg-foreground dark:bg-ring pointer-events-none" />
+      <div className="absolute -top-1.5 w-1/2 right-1.5 h-1.5 bg-foreground dark:bg-ring pointer-events-none" />
+
+      {/* Bottom horizontal bars */}
+      <div className="absolute -bottom-1.5 w-1/2 left-1.5 h-1.5 bg-foreground dark:bg-ring pointer-events-none" />
+      <div className="absolute -bottom-1.5 w-1/2 right-1.5 h-1.5 bg-foreground dark:bg-ring pointer-events-none" />
+
+      {/* Corner pixels */}
+      <div className="absolute top-0 left-0 size-1.5 bg-foreground dark:bg-ring pointer-events-none" />
+      <div className="absolute top-0 right-0 size-1.5 bg-foreground dark:bg-ring pointer-events-none" />
+      <div className="absolute bottom-0 left-0 size-1.5 bg-foreground dark:bg-ring pointer-events-none" />
+      <div className="absolute bottom-0 right-0 size-1.5 bg-foreground dark:bg-ring pointer-events-none" />
+
+      {/* Vertical bars */}
+      <div className="absolute top-1.5 -left-1.5 h-[calc(100%-12px)] w-1.5 bg-foreground dark:bg-ring pointer-events-none" />
+      <div className="absolute top-1.5 -right-1.5 h-[calc(100%-12px)] w-1.5 bg-foreground dark:bg-ring pointer-events-none" />
     </div>
   );
 }

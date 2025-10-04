@@ -23,7 +23,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-import "./styles/retro.css";
 
 function Command({
   className,

@@ -12,8 +12,6 @@ import {
   CardTitle as ShadcnCardTitle,
 } from "@/components/ui/card";
 
-import "./styles/retro.css";
-
 export const cardVariants = cva("", {
   variants: {
     font: {
@@ -32,98 +30,66 @@ export interface BitCardProps
   asChild?: boolean;
 }
 
-function Card({ ...props }: BitCardProps) {
+function Card({ children, ...props }: BitCardProps) {
   const { className, font } = props;
 
   return (
-    <div
-      className={cn(
-        "relative border-y-6 border-foreground dark:border-ring !p-0",
-        className
-      )}
-    >
+    <div className="relative">
       <ShadcnCard
         {...props}
         className={cn(
-          "rounded-none border-0 !w-full",
+          "rounded-none border-none",
           font !== "normal" && "retro",
-          className
+          className,
         )}
-      />
+      >
+        {children}
+      </ShadcnCard>
 
-      <div
-        className="absolute inset-0 border-x-6 -mx-1.5 border-foreground dark:border-ring pointer-events-none"
-        aria-hidden="true"
-      />
+      {/* Pixelated border */}
+      {/* Top horizontal bars */}
+      <div className="absolute -top-1.5 w-1/2 left-1.5 h-1.5 bg-foreground dark:bg-ring pointer-events-none" />
+      <div className="absolute -top-1.5 w-1/2 right-1.5 h-1.5 bg-foreground dark:bg-ring pointer-events-none" />
+
+      {/* Bottom horizontal bars */}
+      <div className="absolute -bottom-1.5 w-1/2 left-1.5 h-1.5 bg-foreground dark:bg-ring pointer-events-none" />
+      <div className="absolute -bottom-1.5 w-1/2 right-1.5 h-1.5 bg-foreground dark:bg-ring pointer-events-none" />
+
+      {/* Corner pixels */}
+      <div className="absolute top-0 left-0 size-1.5 bg-foreground dark:bg-ring pointer-events-none" />
+      <div className="absolute top-0 right-0 size-1.5 bg-foreground dark:bg-ring pointer-events-none" />
+      <div className="absolute bottom-0 left-0 size-1.5 bg-foreground dark:bg-ring pointer-events-none" />
+      <div className="absolute bottom-0 right-0 size-1.5 bg-foreground dark:bg-ring pointer-events-none" />
+
+      {/* Vertical bars */}
+      <div className="absolute top-1.5 -left-1.5 h-[calc(100%-12px)] w-1.5 bg-foreground dark:bg-ring pointer-events-none" />
+      <div className="absolute top-1.5 -right-1.5 h-[calc(100%-12px)] w-1.5 bg-foreground dark:bg-ring pointer-events-none" />
     </div>
   );
 }
 
-function CardHeader({ ...props }: BitCardProps) {
-  const { className, font } = props;
-
-  return (
-    <ShadcnCardHeader
-      className={cn(font !== "normal" && "retro", className)}
-      {...props}
-    />
-  );
+function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
+  return <ShadcnCardHeader className={className} {...props} />;
 }
 
-function CardTitle({ ...props }: BitCardProps) {
-  const { className, font } = props;
-
-  return (
-    <ShadcnCardTitle
-      className={cn(font !== "normal" && "retro", className)}
-      {...props}
-    />
-  );
+function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
+  return <ShadcnCardTitle className={className} {...props} />;
 }
 
-function CardDescription({ ...props }: BitCardProps) {
-  const { className, font } = props;
-
-  return (
-    <ShadcnCardDescription
-      className={cn(font !== "normal" && "retro", className)}
-      {...props}
-    />
-  );
+function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
+  return <ShadcnCardDescription className={className} {...props} />;
 }
 
-function CardAction({ ...props }: BitCardProps) {
-  const { className, font } = props;
-
-  return (
-    <ShadcnCardAction
-      className={cn(font !== "normal" && "retro", className)}
-      {...props}
-    />
-  );
+function CardAction({ className, ...props }: React.ComponentProps<"div">) {
+  return <ShadcnCardAction className={className} {...props} />;
 }
 
-function CardContent({ ...props }: BitCardProps) {
-  const { className, font } = props;
-
-  return (
-    <ShadcnCardContent
-      className={cn(font !== "normal" && "retro", className)}
-      {...props}
-    />
-  );
+function CardContent({ className, ...props }: React.ComponentProps<"div">) {
+  return <ShadcnCardContent className={className} {...props} />;
 }
 
-function CardFooter({ ...props }: BitCardProps) {
-  const { className, font } = props;
-
-  return (
-    <ShadcnCardFooter
-      data-slot="card-footer"
-      className={cn(font !== "normal" && "retro", className)}
-      {...props}
-    />
-  );
+function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
+  return <ShadcnCardFooter className={className} {...props} />;
 }
 
 export {

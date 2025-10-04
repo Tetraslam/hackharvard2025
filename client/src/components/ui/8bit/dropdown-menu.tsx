@@ -19,7 +19,6 @@ import {
   DropdownMenuTrigger as ShadcnDropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import "./styles/retro.css";
 
 const DropdownMenu = ShadcnDropdownMenu;
 

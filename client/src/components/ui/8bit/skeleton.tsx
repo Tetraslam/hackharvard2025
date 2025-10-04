@@ -2,7 +2,6 @@ import { cn } from "@/lib/utils";
 
 import { Skeleton as ShadcnSkeleton } from "@/components/ui/skeleton";
 
-import "./styles/retro.css";
 
 export interface BitSkeletonProp extends React.ComponentProps<"div"> {
   asChild?: boolean;
