@@ -11,7 +11,7 @@ import type {
 } from "./types";
 
 const app = new Hono();
-app.get("/", (c) => c.text("Wizard duel server running"));
+app.get("/", (c) => c.text("FIREBALL server running"));
 app.get("/health", (c) => c.json({ status: "ok" }));
 
 const httpServer = createServer(
@@ -59,5 +59,5 @@ io.on("connection", (socket) => {
 });
 
 httpServer.listen(3000, () => {
-	console.log("🎮 Wizard Duel Server running on http://localhost:3000");
+	console.log("🔥 FIREBALL Server running on http://localhost:3000");
 });

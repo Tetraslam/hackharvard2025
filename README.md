@@ -1,4 +1,4 @@
-# Wizard Duel 🧙‍♂️⚡
+# FIREBALL 🔥⚡
 
 A real-time multiplayer gesture-based combat game where players use their body movements to cast spells and battle each other. Built for HackHarvard 2025.
 

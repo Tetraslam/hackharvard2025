@@ -2,10 +2,10 @@
 Skip to content
 Chat history
 You said:
-okay we decided on a hackharvard project: we're building a game (2 players) where each player stands in front of a separate laptop with its camera turned on and they use gestures to play the game. it's basically a wizard's duel but the gestures are hilarious, like a kamehameha for a fireball and a boxing stance for a shield. we were thinking of the stack since we want a "lobby joining" system so like websockets or whatever so web would make sense but we don't know how the vision stack works on web so yeah tell us what you think
+okay we decided on a hackharvard project: we're building a game (2 players) where each player stands in front of a separate laptop with its camera turned on and they use gestures to play the game. it's basically a FIREBALL duel but the gestures are hilarious, like a kamehameha for a fireball and a boxing stance for a shield. we were thinking of the stack since we want a "lobby joining" system so like websockets or whatever so web would make sense but we don't know how the vision stack works on web so yeah tell us what you think
 ChatGPT said:
 
-Hot. Wizard duel but the spells are dumb-funny. Do it all in-browser: vision local on each laptop, send only “actions” over the wire. Low latency, no ROS nonsense.
+Hot. FIREBALL duel but the spells are dumb-funny. Do it all in-browser: vision local on each laptop, send only "actions" over the wire. Low latency, no ROS nonsense.
 
 Here’s the stack I’d pick:
 
@@ -280,7 +280,7 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 
 const app = new Hono();
-app.get("/", (c) => c.text("Wizard duel server running"));
+app.get("/", (c) => c.text("FIREBALL server running"));
 
 const httpServer = createServer(app.fetch as any);
 
@@ -605,7 +605,7 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 
 const app = new Hono();
-app.get("/", (c) => c.text("Wizard duel server running"));
+app.get("/", (c) => c.text("FIREBALL server running"));
 
 const httpServer = createServer(app.fetch as any);
 

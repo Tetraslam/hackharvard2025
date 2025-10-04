@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Wizard Duel** - A real-time multiplayer gesture-based combat game where 2 players use body movements captured via laptop cameras to cast spells and battle each other. Built for HackHarvard 2025.
+**FIREBALL** - A real-time multiplayer gesture-based combat game where 2 players use body movements captured via laptop cameras to cast spells and battle each other. Built for HackHarvard 2025.
 
 ## Commands
 

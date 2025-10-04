@@ -1,7 +1,7 @@
 {
-  "name": "hackharvard2025",
+  "name": "fireball",
   "version": "1.0.0",
-  "description": "",
+  "description": "A real-time multiplayer gesture-based combat game where players use their body movements to cast spells and battle each other.",
   "main": "index.js",
   "scripts": {
     "dev:server": "pnpm --filter server dev",
