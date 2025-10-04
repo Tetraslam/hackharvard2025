@@ -144,14 +144,8 @@ export function usePoseDetection(canvasRef?: React.RefObject<HTMLCanvasElement>)
     }
 
     // Get key landmarks
-    const leftShoulder = landmarks[11];
-    const rightShoulder = landmarks[12];
-    const leftElbow = landmarks[13];
-    const rightElbow = landmarks[14];
     const leftWrist = landmarks[15];
     const rightWrist = landmarks[16];
-    const leftHip = landmarks[23];
-    const rightHip = landmarks[24];
 
     // Check visibility first
     if (leftWrist.visibility < 0.5 || rightWrist.visibility < 0.5) {
@@ -166,7 +160,6 @@ export function usePoseDetection(canvasRef?: React.RefObject<HTMLCanvasElement>)
       detectJobApplication(landmarks),
       detectPowerStance(landmarks),
       detectDodgeRoll(landmarks),
-      detectTestGesture(landmarks),
     ];
 
     // Return the gesture with highest confidence
@@ -258,7 +251,7 @@ export function usePoseDetection(canvasRef?: React.RefObject<HTMLCanvasElement>)
     const confidence = wristDistance < 0.1 ? 0.8 : 0;
 
     return {
-      move: "jobapplication",
+      move: "job_application",
       confidence,
       isDetected: confidence > 0.6
     };
@@ -278,7 +271,7 @@ export function usePoseDetection(canvasRef?: React.RefObject<HTMLCanvasElement>)
     const confidence = isWideStance ? 0.7 : 0;
 
     return {
-      move: "powerstance",
+      move: "power_stance",
       confidence,
       isDetected: confidence > 0.5
     };
@@ -298,32 +291,12 @@ export function usePoseDetection(canvasRef?: React.RefObject<HTMLCanvasElement>)
     const confidence = isTilted ? 0.6 : 0;
 
     return {
-      move: "dodgeroll",
+      move: "dodge_roll",
       confidence,
       isDetected: confidence > 0.5
     };
   };
 
-  // Simple test gesture - just raise one hand
-  const detectTestGesture = (landmarks: any[]): GestureDetection => {
-    const leftWrist = landmarks[15];
-    const rightWrist = landmarks[16];
-    const leftShoulder = landmarks[11];
-    const rightShoulder = landmarks[12];
-
-    // Check if either hand is raised above shoulder
-    const leftHandUp = leftWrist.y < leftShoulder.y;
-    const rightHandUp = rightWrist.y < rightShoulder.y;
-    const anyHandUp = leftHandUp || rightHandUp;
-
-    const confidence = anyHandUp ? 0.9 : 0;
-
-    return {
-      move: "test",
-      confidence,
-      isDetected: confidence > 0.8
-    };
-  };
 
   return {
     isInitialized,
