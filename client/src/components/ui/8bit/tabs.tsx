@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import { type VariantProps, cva } from "class-variance-authority";
 

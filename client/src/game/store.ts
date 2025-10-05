@@ -17,18 +17,29 @@ interface GameStore {
   isReady: boolean;
   opponentReady: boolean;
   currentView?: "menu" | "rules" | "lobby" | "game";
-  
+
   setPhase: (phase: GamePhase) => void;
   setRoomCode: (code: string) => void;
-  setPlayerId: (id: string) => void;
+  setPlayerId: (id: string | null) => void;
   setPlayerName: (name: string) => void;
-  setOpponentId: (id: string) => void;
-  setOpponentName: (name: string) => void;
+  setOpponentId: (id: string | null) => void;
+  setOpponentName: (name: string | null) => void;
   updatePlayers: (players: Record<string, Player>) => void;
   updatePlayerHp: (playerId: string, hp: number) => void;
   setCurrentRound: (round: number) => void;
-  setLastMove: (move: { playerId: string; move: MoveType; timestamp: number }) => void;
-  setLastInteraction: (interaction: { type: string; moves: MoveType[] }) => void;
+  setLastMove: (
+    move: {
+      playerId: string;
+      move: MoveType;
+      timestamp: number;
+    } | null,
+  ) => void;
+  setLastInteraction: (
+    interaction: {
+      type: string;
+      moves: MoveType[];
+    } | null,
+  ) => void;
   setWinner: (winnerId: string) => void;
   setError: (error: string | null) => void;
   setReady: (ready: boolean) => void;
@@ -58,19 +69,19 @@ export const useGameStore = create<GameStore>((set) => ({
   ...initialState,
 
   setPhase: (phase) => set({ phase }),
-  
+
   setRoomCode: (code) => set({ roomCode: code }),
-  
+
   setPlayerId: (id) => set({ playerId: id }),
-  
+
   setPlayerName: (name) => set({ playerName: name }),
-  
+
   setOpponentId: (id) => set({ opponentId: id }),
-  
+
   setOpponentName: (name) => set({ opponentName: name }),
-  
+
   updatePlayers: (players) => set({ players }),
-  
+
   updatePlayerHp: (playerId, hp) =>
     set((state) => ({
       players: {
@@ -78,23 +89,22 @@ export const useGameStore = create<GameStore>((set) => ({
         [playerId]: { ...state.players[playerId], hp },
       },
     })),
-  
+
   setCurrentRound: (round) => set({ currentRound: round }),
-  
+
   setLastMove: (move) => set({ lastMove: move }),
-  
+
   setLastInteraction: (interaction) => set({ lastInteraction: interaction }),
-  
+
   setWinner: (winnerId) => set({ winnerId }),
-  
+
   setError: (error) => set({ error }),
-  
+
   setReady: (ready) => set({ isReady: ready }),
-  
+
   setOpponentReady: (ready) => set({ opponentReady: ready }),
-  
+
   setCurrentView: (view) => set({ currentView: view }),
-  
+
   reset: () => set(initialState),
 }));
-

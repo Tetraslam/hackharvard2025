@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { type VariantProps, cva } from "class-variance-authority";
 

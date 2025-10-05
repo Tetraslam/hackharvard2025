@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
 import { type VariantProps, cva } from "class-variance-authority";
 

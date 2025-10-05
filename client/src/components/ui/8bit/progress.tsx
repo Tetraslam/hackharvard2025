@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import * as ProgressPrimitive from "@radix-ui/react-progress";
 import { type VariantProps, cva } from "class-variance-authority";
 
