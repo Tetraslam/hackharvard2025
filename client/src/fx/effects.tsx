@@ -54,10 +54,10 @@ export function ShieldEffect({ position, onComplete }: ShieldEffectProps) {
     <div
       className="absolute pointer-events-none z-40"
       style={{
-        left: `${position.x - 15}vw`,
-        top: `${position.y - 9}vh`,
+        left: `${position.x - 13}vw`,
+        top: `${position.y - 23.5}vh`,
         width: "30vw",
-        height: "18vw",
+        height: "17vw",
         border: "4px solid #4169e1",
         borderRadius: "8px",
         boxShadow: "0 0 30px #4169e1, inset 0 0 30px #4169e1",

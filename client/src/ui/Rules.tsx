@@ -67,7 +67,7 @@ export function Rules() {
                 <div className="flex justify-between items-center p-3 bg-muted rounded">
                   <div>
                     <div className="font-bold text-lg">Shield</div>
-                    <div className="text-sm text-muted-foreground">Boxing stance</div>
+                    <div className="text-sm text-muted-foreground">Arms crossed (block)</div>
                   </div>
                   <div className="text-lg font-bold text-gray-500">Blocks</div>
                 </div>

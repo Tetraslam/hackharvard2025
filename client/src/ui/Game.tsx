@@ -369,9 +369,9 @@ export function Game() {
 					<AnimationLayer />
 				</div>
 
-				{/* Pokemon Showdown Style Overlay UI */}
-				<div className="absolute bottom-8 right-8 z-10">
-					<Card className="w-80">
+                {/* Pokemon Showdown Style Overlay UI */}
+                <div className="absolute bottom-6 right-6 z-10">
+                    <Card className="w-[28rem] md:w-[30rem]">
 						<CardContent className="p-6 space-y-4">
 							<div className="text-center">
 								<h2 className="text-2xl font-bold retro mb-2">
@@ -425,7 +425,7 @@ export function Game() {
 									<p>• Fireball: Both arms forward, palms together</p>
 									<p>• Water Blast: Arms crossed → sweep</p>
 									<p>• Lightning: One arm up, one forward</p>
-									<p>• Shield: Boxing stance (arms up)</p>
+									<p>• Shield: Arms crossed (block)</p>
 									<p>• Counter: Cross-block → open</p>
 									<p>• Job Application: Prayer hands</p>
 									<p>• Meteor: Both arms very high, spread apart</p>
