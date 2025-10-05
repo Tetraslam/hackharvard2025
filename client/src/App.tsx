@@ -3,6 +3,7 @@ import { useGameStore } from "@/game/store";
 import { useSocketEvents } from "@/net/useSocket";
 import { Game } from "@/ui/Game";
 import { Lobby } from "@/ui/Lobby";
+import { Rules } from "@/ui/Rules";
 
 function App() {
   useSocketEvents();
@@ -11,9 +12,12 @@ function App() {
     document.documentElement.classList.add("dark");
   }, []);
 
-  const { phase } = useGameStore();
+  const { phase, currentView } = useGameStore();
 
-  // Rules view routed via Lobby button
+  // Handle rules view
+  if (currentView === "rules") {
+    return <Rules />;
+  }
 
   const isLobby = phase === "LOBBY_WAITING" || phase === "LOBBY_READY";
   const isGame =
