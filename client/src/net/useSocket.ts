@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { playBgm, playSfx, stopBgm } from "@/lib/utils";
 import { useGameStore } from "../game/store";
 import { connectSocket, getSocket } from "./socket";
 
@@ -66,6 +67,15 @@ export function useSocketEvents() {
 			if (data && "round" in data) {
 				setCurrentRound(data.round as number);
 			}
+
+			// Audio routing
+			if (phase === "LOBBY_WAITING" || phase === "LOBBY_READY") {
+				playBgm("/audio/bgm_upbeat.mp3", 0.35);
+			} else if (phase === "ROUND_ACTIVE") {
+				playBgm("/audio/bgm_battle.mp3", 0.45);
+			} else if (phase === "GAME_END" || phase === "PHOTO_BOOTH") {
+				stopBgm();
+			}
 		});
 
 		socket.on("gameStateUpdate", (state) => {
@@ -78,6 +88,7 @@ export function useSocketEvents() {
 		socket.on("moveExecuted", (data) => {
 			console.log("Move executed:", data);
 			setLastMove(data);
+			playSfx(`/audio/${data.move}.mp3`, 0.9);
 		});
 
 		socket.on("interaction", (data) => {
@@ -89,6 +100,7 @@ export function useSocketEvents() {
 		socket.on("damageDealt", (data) => {
 			console.log("Damage dealt:", data);
 			updatePlayerHp(data.targetId, data.newHp);
+			playSfx("/audio/hit.mp3", 0.8);
 		});
 
 		socket.on("roundEnd", (data) => {

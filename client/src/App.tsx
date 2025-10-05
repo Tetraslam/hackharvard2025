@@ -12,18 +12,17 @@ function App() {
 		document.documentElement.classList.add("dark");
 	}, []);
 
-	const { phase, currentView } = useGameStore();
+    const { phase } = useGameStore();
 
-	// Handle different views
-	if (currentView === "rules") {
-		return <Rules />;
-	}
+    // Rules view routed via Lobby button
 
 	const isLobby = phase === "LOBBY_WAITING" || phase === "LOBBY_READY";
 	const isGame =
 		phase === "ROUND_START" ||
 		phase === "ROUND_ACTIVE" ||
-		phase === "ROUND_END";
+		phase === "ROUND_END" ||
+		phase === "PHOTO_BOOTH" ||
+		phase === "GAME_END";
 
 	if (isLobby) {
 		return <Lobby />;

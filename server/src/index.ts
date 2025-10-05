@@ -56,6 +56,25 @@ io.on("connection", (socket) => {
 		handlePlayAgain(io, socket);
 	});
 
+  // WebRTC signaling relay (room-scoped broadcast to the other peer)
+  socket.on("rtcOffer", (offer) => {
+    const room = socket.data.roomCode;
+    if (!room) return;
+    socket.to(room).emit("rtcOffer", socket.id, offer);
+  });
+
+  socket.on("rtcAnswer", (answer) => {
+    const room = socket.data.roomCode;
+    if (!room) return;
+    socket.to(room).emit("rtcAnswer", socket.id, answer);
+  });
+
+  socket.on("rtcIceCandidate", (candidate) => {
+    const room = socket.data.roomCode;
+    if (!room) return;
+    socket.to(room).emit("rtcIceCandidate", socket.id, candidate);
+  });
+
 	socket.on("disconnect", () => {
 		console.log("Player disconnected:", socket.id);
 		handleDisconnect(io, socket);

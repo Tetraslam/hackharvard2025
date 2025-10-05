@@ -79,6 +79,7 @@ export function Camera({ onFrame, className = "" }: CameraProps) {
         autoPlay
         playsInline
         muted
+        data-local="true"
         className="w-full h-full object-cover rounded"
         style={{ transform: "scaleX(-1)" }} // Mirror the video
       />

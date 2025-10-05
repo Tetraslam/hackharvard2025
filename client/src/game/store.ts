@@ -16,6 +16,7 @@ interface GameStore {
   error: string | null;
   isReady: boolean;
   opponentReady: boolean;
+  currentView?: "menu" | "rules" | "lobby" | "game";
   
   setPhase: (phase: GamePhase) => void;
   setRoomCode: (code: string) => void;

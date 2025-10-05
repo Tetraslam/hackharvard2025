@@ -38,6 +38,9 @@ interface ClientToServerEvents {
   cast: (move: MoveType, clientTimestamp: number) => void;
   photoReady: () => void;
   playAgain: () => void;
+  rtcOffer: (offer: RTCSessionDescriptionInit) => void;
+  rtcAnswer: (answer: RTCSessionDescriptionInit) => void;
+  rtcIceCandidate: (candidate: RTCIceCandidateInit) => void;
 }
 
 interface ServerToClientEvents {
@@ -79,6 +82,9 @@ interface ServerToClientEvents {
     loserId: string;
   }) => void;
   error: (message: string) => void;
+  rtcOffer: (fromId: string, offer: RTCSessionDescriptionInit) => void;
+  rtcAnswer: (fromId: string, answer: RTCSessionDescriptionInit) => void;
+  rtcIceCandidate: (fromId: string, candidate: RTCIceCandidateInit) => void;
 }
 
 const SERVER_URL = "http://localhost:3000";
