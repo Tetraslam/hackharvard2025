@@ -16,96 +16,117 @@ interface PhotoBoothProps {
 export function PhotoBooth({ visible }: PhotoBoothProps) {
   const [count, setCount] = useState(3);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [localImageUrl, setLocalImageUrl] = useState<string | null>(null);
+  const [remoteImageUrl, setRemoteImageUrl] = useState<string | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const captureRef = useRef<() => void>(() => {});
+  const captureLocalRef = useRef<() => void>(() => {});
+  const captureRemoteRef = useRef<() => void>(() => {});
   const { playerId, opponentId, players, playerName, opponentName, winnerId } =
     useGameStore();
-  // define stable capture function
-  captureRef.current = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+
+  // Capture individual local video
+  captureLocalRef.current = () => {
     const local = document.querySelector<HTMLVideoElement>(
       "video[data-local='true']",
     );
-    const remote = document.querySelector<HTMLVideoElement>(
-      "video[data-remote='true']",
-    );
-    // We'll still render even if one stream is missing
+    if (!local) return;
 
-    const width = 1280;
-    const height = 720;
+    const width = 640;
+    const height = 360;
+    const canvas = document.createElement("canvas");
     canvas.width = width;
     canvas.height = height;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+
     ctx.fillStyle = "#0b0b0f";
     ctx.fillRect(0, 0, width, height);
 
-    // keep aspect ratio (contain)
-    const drawContain = (
-      video: HTMLVideoElement,
-      x: number,
-      y: number,
-      w: number,
-      h: number,
-      mirror = false,
-    ) => {
-      const vw = video.videoWidth || 640;
-      const vh = video.videoHeight || 480;
-      const scale = Math.min(w / vw, h / vh);
-      const dw = vw * scale;
-      const dh = vh * scale;
-      const dx = x + (w - dw) / 2;
-      const dy = y + (h - dh) / 2;
-      ctx.save();
-      if (mirror) {
-        ctx.translate(dx + dw, dy);
-        ctx.scale(-1, 1);
-        ctx.drawImage(video, 0, 0, dw, dh);
-      } else {
-        ctx.drawImage(video, dx, dy, dw, dh);
-      }
-      ctx.restore();
-    };
+    // Draw local video (mirrored)
+    const vw = local.videoWidth || 640;
+    const vh = local.videoHeight || 480;
+    const scale = Math.min(width / vw, height / vh);
+    const dw = vw * scale;
+    const dh = vh * scale;
+    const dx = (width - dw) / 2;
+    const dy = (height - dh) / 2;
 
-    const margin = 24;
-    const boxW = width / 2 - margin * 1.5;
-    const boxH = height - margin * 6;
-    if (local) {
-      drawContain(local, margin, margin * 3, boxW, boxH, true);
-    } else {
-      ctx.fillStyle = "#222";
-      ctx.fillRect(margin, margin * 3, boxW, boxH);
-      ctx.fillStyle = "#888";
-      ctx.font = "28px monospace";
-      ctx.fillText("No local video", margin + 24, margin * 3 + 48);
-    }
-    if (remote) {
-      drawContain(remote, width - boxW - margin, margin * 3, boxW, boxH, true);
-    } else {
-      const rx = width - boxW - margin;
-      ctx.fillStyle = "#222";
-      ctx.fillRect(rx, margin * 3, boxW, boxH);
-      ctx.fillStyle = "#888";
-      ctx.font = "28px monospace";
-      ctx.fillText("No remote video", rx + 24, margin * 3 + 48);
-    }
+    ctx.save();
+    ctx.translate(dx + dw, dy);
+    ctx.scale(-1, 1);
+    ctx.drawImage(local, 0, 0, dw, dh);
+    ctx.restore();
 
     ctx.fillStyle = "#fff";
-    ctx.font = "72px monospace";
+    ctx.font = "36px monospace";
     ctx.textAlign = "center";
-    ctx.fillText("FIREBALL - GG", width / 2, 72);
+    ctx.fillText("PLAYER", width / 2, height / 2);
 
-    setImageUrl(canvas.toDataURL("image/png"));
+    setLocalImageUrl(canvas.toDataURL("image/png"));
+  };
+
+  // Capture individual remote video
+  captureRemoteRef.current = () => {
+    const remote = document.querySelector<HTMLVideoElement>(
+      "video[data-remote='true']",
+    );
+    if (!remote) return;
+
+    const width = 640;
+    const height = 360;
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    ctx.fillStyle = "#0b0b0f";
+    ctx.fillRect(0, 0, width, height);
+
+    // Draw remote video (mirrored)
+    const vw = remote.videoWidth || 640;
+    const vh = remote.videoHeight || 480;
+    const scale = Math.min(width / vw, height / vh);
+    const dw = vw * scale;
+    const dh = vh * scale;
+    const dx = (width - dw) / 2;
+    const dy = (height - dh) / 2;
+
+    ctx.save();
+    ctx.translate(dx + dw, dy);
+    ctx.scale(-1, 1);
+    ctx.drawImage(remote, 0, 0, dw, dh);
+    ctx.restore();
+
+    ctx.fillStyle = "#fff";
+    ctx.font = "36px monospace";
+    ctx.textAlign = "center";
+    ctx.fillText("OPPONENT", width / 2, height / 2);
+
+    setRemoteImageUrl(canvas.toDataURL("image/png"));
+  };
+
+  // Legacy composite capture function (for fallback)
+  captureRef.current = () => {
+    captureLocalRef.current();
+    captureRemoteRef.current();
   };
 
   useEffect(() => {
     if (!visible) return;
+    // Reset all image states
     setImageUrl(null);
+    setLocalImageUrl(null);
+    setRemoteImageUrl(null);
     setCount(3);
     const id = setInterval(() => setCount((c) => (c > 0 ? c - 1 : 0)), 1000);
-    const timeout = setTimeout(() => captureRef.current(), 3500);
+    const timeout = setTimeout(() => {
+      // Capture both individual images
+      captureLocalRef.current();
+      captureRemoteRef.current();
+    }, 3500);
     return () => {
       clearInterval(id);
       clearTimeout(timeout);
@@ -123,7 +144,7 @@ export function PhotoBooth({ visible }: PhotoBoothProps) {
           </CardTitle>
         </CardHeader>
         <CardContent className="p-6 space-y-6">
-          {!imageUrl && (
+          {!localImageUrl && !remoteImageUrl && (
             <div className="text-center">
               <div className="text-6xl retro mb-2">Pose in {count}</div>
               <div className="text-sm text-muted-foreground">
@@ -132,31 +153,45 @@ export function PhotoBooth({ visible }: PhotoBoothProps) {
             </div>
           )}
           <canvas ref={canvasRef} className="hidden" />
-          {imageUrl && (
+
+          {localImageUrl && remoteImageUrl && (
             <div className="space-y-6">
-              <img
-                src={imageUrl}
-                alt="Endgame capture"
-                className="w-full rounded"
-              />
-              <div className="grid grid-cols-2 gap-6 text-center">
+              <div className="grid grid-cols-2 gap-4">
+                {/* Local Player Image */}
                 <div>
-                  <div className="text-xl retro">{playerName || "You"}</div>
-                  <div className="text-sm text-muted-foreground">
-                    Rounds Won:{" "}
-                    {playerId ? (players[playerId]?.roundsWon ?? 0) : 0}
+                  <div className="text-center mb-2">
+                    <div className="text-xl retro text-blue-400">
+                      {playerName || "You"}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Local Capture
+                    </div>
                   </div>
+                  <img
+                    src={localImageUrl}
+                    alt={`${playerName || "You"} - Local capture`}
+                    className="w-full rounded border-2 border-blue-500"
+                  />
                 </div>
+
+                {/* Remote Player Image */}
                 <div>
-                  <div className="text-xl retro">
-                    {opponentName || "Opponent"}
+                  <div className="text-center mb-2">
+                    <div className="text-xl retro text-red-400">
+                      {opponentName || "Opponent"}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Remote Capture
+                    </div>
                   </div>
-                  <div className="text-sm text-muted-foreground">
-                    Rounds Won:{" "}
-                    {opponentId ? (players[opponentId!]?.roundsWon ?? 0) : 0}
-                  </div>
+                  <img
+                    src={remoteImageUrl}
+                    alt={`${opponentName || "Opponent"} - Remote capture`}
+                    className="w-full rounded border-2 border-red-500"
+                  />
                 </div>
               </div>
+
               <div className="text-center">
                 <div className="text-lg">
                   Winner:{" "}

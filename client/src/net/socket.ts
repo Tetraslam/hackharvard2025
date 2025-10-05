@@ -1,15 +1,15 @@
 import { io, type Socket } from "socket.io-client";
 
-export type MoveType = 
-  | "fireball" 
-  | "waterblast" 
-  | "lightning" 
-  | "shield" 
-  | "counter" 
-  | "meteor" 
+export type MoveType =
+  | "fireball"
+  | "waterblast"
+  | "lightning"
+  | "shield"
+  | "counter"
+  | "meteor"
   | "jobapplication";
 
-export type GamePhase = 
+export type GamePhase =
   | "LOBBY_WAITING"
   | "LOBBY_READY"
   | "ROUND_START"
@@ -32,7 +32,15 @@ export interface PlayerEffect {
 
 interface ClientToServerEvents {
   createLobby: (name: string, callback: (code: string) => void) => void;
-  joinLobby: (code: string, name: string, callback: (success: boolean, error?: string, players?: Record<string, { name: string }>) => void) => void;
+  joinLobby: (
+    code: string,
+    name: string,
+    callback: (
+      success: boolean,
+      error?: string,
+      players?: Record<string, { name: string }>,
+    ) => void,
+  ) => void;
   ready: () => void;
   unready: () => void;
   cast: (move: MoveType, clientTimestamp: number) => void;
@@ -45,8 +53,16 @@ interface ClientToServerEvents {
 
 interface ServerToClientEvents {
   lobbyCreated: (code: string) => void;
-  lobbyJoined: (success: boolean, error?: string, players?: Record<string, { name: string }>) => void;
-  playerJoined: (playerId: string, playerName: string, playerCount: number) => void;
+  lobbyJoined: (
+    success: boolean,
+    error?: string,
+    players?: Record<string, { name: string }>,
+  ) => void;
+  playerJoined: (
+    playerId: string,
+    playerName: string,
+    playerCount: number,
+  ) => void;
   playerLeft: (playerId: string) => void;
   playerReady: (playerId: string) => void;
   playerUnready: (playerId: string) => void;
@@ -77,17 +93,14 @@ interface ServerToClientEvents {
     winnerRounds: number;
     loserRounds: number;
   }) => void;
-  gameEnd: (data: {
-    winnerId: string;
-    loserId: string;
-  }) => void;
+  gameEnd: (data: { winnerId: string; loserId: string }) => void;
   error: (message: string) => void;
   rtcOffer: (fromId: string, offer: RTCSessionDescriptionInit) => void;
   rtcAnswer: (fromId: string, answer: RTCSessionDescriptionInit) => void;
   rtcIceCandidate: (fromId: string, candidate: RTCIceCandidateInit) => void;
 }
 
-const SERVER_URL = "http://localhost:3000";
+const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:3000";
 
 export type TypedSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 
@@ -112,4 +125,3 @@ export function connectSocket(): void {
 export function disconnectSocket(): void {
   socketInstance?.disconnect();
 }
-

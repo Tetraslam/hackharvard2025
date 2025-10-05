@@ -192,6 +192,42 @@ export function usePoseDetection(
     initializePoseDetection();
   }, []);
 
+  // Start processing when video element gets a stream
+  useEffect(() => {
+    const startProcessing = () => {
+      if (videoRef.current && isInitialized && videoRef.current.srcObject instanceof MediaStream) {
+        console.log("🎥 [POSE] Starting pose detection processing");
+        const processLoop = () => {
+          if (videoRef.current && isInitialized && poseLandmarker) {
+            processFrame(videoRef.current);
+          }
+          requestAnimationFrame(processLoop);
+        };
+        processLoop();
+      }
+    };
+
+    // Start processing if video already has stream
+    startProcessing();
+
+    // Listen for video srcObject changes
+    const videoElement = videoRef.current;
+    if (videoElement) {
+      const observer = new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'src') {
+            startProcessing();
+            break;
+          }
+        }
+      });
+      observer.observe(videoElement, { attributes: true });
+
+      // Also listen for loadedmetadata event
+      videoElement.addEventListener('loadedmetadata', startProcessing, { once: true });
+    }
+  }, [isInitialized, poseLandmarker]);
+
   const detectGesture = useCallback(
     (poseLandmarks?: LM[]): GestureDetection => {
       if (!poseLandmarks || poseLandmarks.length < 33) {
@@ -228,7 +264,10 @@ export function usePoseDetection(
 
   const processFrame = useCallback(
     async (video: HTMLVideoElement) => {
-      if (!poseLandmarker || !isInitialized) return;
+      // Add safety checks to prevent errors during initialization
+      if (!video || !poseLandmarker || !handLandmarker || !isInitialized) {
+        return;
+      }
 
       // Throttle processing
       const now = Date.now();
@@ -314,6 +353,7 @@ export function usePoseDetection(
         }
       } catch (error) {
         console.error("Error processing frame:", error);
+        // Don't crash the component on pose detection errors
       }
     },
     [poseLandmarker, handLandmarker, isInitialized, canvasRef, detectGesture],
