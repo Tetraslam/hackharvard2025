@@ -35,6 +35,35 @@ export function Game() {
     }
   }, [detectedGesture, phase, lastCastAt]);
 
+  // Mirror camera stream into circular local display video
+  useEffect(() => {
+    const syncLocalDisplay = () => {
+      const sourceVideo = document.querySelector(
+        "video[data-local='true']",
+      ) as HTMLVideoElement | null;
+      const displayVideo = document.querySelector(
+        "video[data-local-display='true']",
+      ) as HTMLVideoElement | null;
+
+      if (sourceVideo && sourceVideo.srcObject && displayVideo) {
+        if (displayVideo.srcObject !== sourceVideo.srcObject) {
+          displayVideo.srcObject = sourceVideo.srcObject;
+          // Ensure autoplay without sound
+          displayVideo.muted = true;
+          (displayVideo as HTMLVideoElement)
+            .play()
+            .catch(() => {});
+          console.log("Synced local display video with camera stream");
+        }
+      }
+    };
+
+    // Try immediately and then periodically in case camera initializes late
+    syncLocalDisplay();
+    const intervalId = window.setInterval(syncLocalDisplay, 500);
+    return () => window.clearInterval(intervalId);
+  }, []);
+
   // WebRTC signaling + media setup - only when both players are connected
   useEffect(() => {
     if (!playerId || !opponentId) {
@@ -262,43 +291,64 @@ export function Game() {
           phase={phase}
         />
 
-        {/* Arena with your camera as background and remote feed as opponent */}
+        {/* Arena with stadium background and video overlays on circular platforms */}
         <div className="absolute inset-0 pt-32 pb-8 bg-transparent">
-          <Camera onFrame={processFrame} className="h-full w-full" />
-
-          {/* Remote opponent video positioned on right */}
-          <video
-            ref={remoteVideoRef}
-            autoPlay
-            playsInline
-            muted
-            data-remote="true"
-            className="absolute right-10 bottom-24 w-80 h-60 object-cover rounded border-2 border-blue-500"
-            style={{ transform: "scaleX(-1)" }}
-            onLoadedMetadata={() => console.log("Remote video loaded metadata")}
-            onCanPlay={() => console.log("Remote video can play")}
-            onError={(e) => console.log("Remote video error:", e)}
-          />
-
-          {/* Pose Visualization Canvas Overlay */}
-          <canvas
-            ref={canvasRef}
-            className="absolute pointer-events-none"
+          {/* Stadium background image */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{
-              top: "0rem",
-              bottom: "0rem",
-              left: 0,
-              right: 0,
-              zIndex: 0,
-              width: "100%",
-              height: "calc(100% - 0rem)",
-              transform: "scaleX(-1)",
+              backgroundImage: `url('/src/assets/maps/basic_arena.webp')`
             }}
           />
+
+          {/* Your video positioned over bottom-left platform (responsive rectangle) */}
+          <div
+            className="absolute overflow-hidden border-4 border-white shadow-lg z-30"
+            style={{ left: "3vw", bottom: "10vh", width: "28vw", height: "16vw" }}
+          >
+            <video
+              data-local-display="true"
+              autoPlay
+              playsInline
+              muted
+              className="w-full h-full object-cover"
+              style={{ transform: "scaleX(-1)" }}
+            />
+            {/* Pose overlay aligned to local video */}
+            <canvas
+              ref={canvasRef}
+              className="absolute inset-0 pointer-events-none"
+              style={{ zIndex: 40, transform: "scaleX(-1)" }}
+            />
+          </div>
+
+          {/* Remote opponent video positioned over top-right platform (responsive rectangle) */}
+          <div
+            className="absolute overflow-hidden border-4 border-white shadow-lg z-30"
+            style={{ right: "8vw", top: "22vh", width: "28vw", height: "16vw" }}
+          >
+            <video
+              ref={remoteVideoRef}
+              autoPlay
+              playsInline
+              muted
+              data-remote="true"
+              className="w-full h-full object-cover"
+              style={{ transform: "scaleX(-1)" }}
+              onLoadedMetadata={() => console.log("Remote video loaded metadata")}
+              onCanPlay={() => console.log("Remote video can play")}
+              onError={(e) => console.log("Remote video error:", e)}
+            />
+          </div>
+
+          {/* Camera for pose detection - invisible overlay */}
+          <div className="absolute inset-0 opacity-0 pointer-events-none">
+            <Camera onFrame={processFrame} className="h-full w-full" />
+          </div>
         </div>
 
-        {/* Overlay UI */}
-        <div className="absolute top-40 right-8 z-10">
+        {/* Pokemon Showdown Style Overlay UI */}
+        <div className="absolute bottom-8 right-8 z-10">
           <Card className="w-80">
             <CardContent className="p-6 space-y-4">
               <div className="text-center">
