@@ -22,16 +22,36 @@ export function PhotoBooth({ visible }: PhotoBoothProps) {
   const { playerId, opponentId, players, playerName, opponentName, winnerId } =
     useGameStore();
   // define stable capture function
-  captureRef.current = () => {
+  captureRef.current = async () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+    
     const local = document.querySelector<HTMLVideoElement>(
       "video[data-local='true']",
     );
     const remote = document.querySelector<HTMLVideoElement>(
       "video[data-remote='true']",
     );
-    // We'll still render even if one stream is missing
+
+    // Wait for both videos to be ready (max 3s)
+    const waitForVideo = async (video: HTMLVideoElement | null, maxWait = 3000): Promise<boolean> => {
+      if (!video) return false;
+      const start = Date.now();
+      while (Date.now() - start < maxWait) {
+        if (video.readyState >= 2 && video.videoWidth > 0) {
+          return true;
+        }
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+      return false;
+    };
+
+    const [localReady, remoteReady] = await Promise.all([
+      waitForVideo(local),
+      waitForVideo(remote),
+    ]);
+
+    console.log("PhotoBooth capture readiness:", { localReady, remoteReady });
 
     const width = 1280;
     const height = 720;
@@ -72,7 +92,7 @@ export function PhotoBooth({ visible }: PhotoBoothProps) {
     const margin = 24;
     const boxW = width / 2 - margin * 1.5;
     const boxH = height - margin * 6;
-    if (local) {
+    if (local && localReady) {
       drawContain(local, margin, margin * 3, boxW, boxH, true);
     } else {
       ctx.fillStyle = "#222";
@@ -81,7 +101,7 @@ export function PhotoBooth({ visible }: PhotoBoothProps) {
       ctx.font = "28px monospace";
       ctx.fillText("No local video", margin + 24, margin * 3 + 48);
     }
-    if (remote) {
+    if (remote && remoteReady) {
       drawContain(remote, width - boxW - margin, margin * 3, boxW, boxH, true);
     } else {
       const rx = width - boxW - margin;
