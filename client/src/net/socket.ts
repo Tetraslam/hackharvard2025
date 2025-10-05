@@ -87,7 +87,8 @@ interface ServerToClientEvents {
   rtcIceCandidate: (fromId: string, candidate: RTCIceCandidateInit) => void;
 }
 
-const SERVER_URL = "http://localhost:3000";
+// Use the same host as the current page, but port 3000 for the server
+const SERVER_URL = `${window.location.protocol}//${window.location.hostname}:3000`;
 
 export type TypedSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 
