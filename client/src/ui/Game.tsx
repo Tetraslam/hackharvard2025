@@ -304,7 +304,7 @@ export function Game() {
           {/* Your video positioned over bottom-left platform (responsive rectangle) */}
           <div
             className="absolute overflow-hidden border-4 border-white shadow-lg z-30"
-            style={{ left: "3vw", bottom: "10vh", width: "28vw", height: "16vw" }}
+            style={{ left: "3vw", bottom: "10vh", width: "32vw", height: "18vw" }}
           >
             <video
               data-local-display="true"
@@ -318,14 +318,14 @@ export function Game() {
             <canvas
               ref={canvasRef}
               className="absolute inset-0 pointer-events-none"
-              style={{ zIndex: 40, transform: "scaleX(-1)" }}
+              style={{ zIndex: 40, left: "-50px", top: "-100px", transform: "scaleX(-0.8)" }}
             />
           </div>
 
           {/* Remote opponent video positioned over top-right platform (responsive rectangle) */}
           <div
             className="absolute overflow-hidden border-4 border-white shadow-lg z-30"
-            style={{ right: "8vw", top: "22vh", width: "28vw", height: "16vw" }}
+            style={{ right: "8vw", top: "22vh", width: "32vw", height: "18vw" }}
           >
             <video
               ref={remoteVideoRef}
